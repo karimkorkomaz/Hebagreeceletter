@@ -1,0 +1,65 @@
+/* ============================================================
+   Tokens + base
+   ============================================================ */
+
+:root {
+  --night:      #0b1230;
+  --night-mid:  #1d2a5c;
+  --dusk:       #6b4a76;
+  --rose:       #c9748a;
+  --peach:      #f0a882;
+  --haze:       #f7d3ae;
+
+  --sea:        #0d2745;
+  --aegean:     #2e6f9e;
+
+  --paper:      #faf6ef;
+  --paper-warm: #f2eade;
+  --ink:        #241f1b;
+  --ink-soft:   #5c5349;
+  --ink-faint:  #9a9084;
+
+  --serif:  "Fraunces", "Iowan Old Style", Georgia, serif;
+  --body:   "Lora", Georgia, "Times New Roman", serif;
+  --script: "Caveat", "Segoe Script", cursive;
+
+  --page: clamp(1.25rem, 6vw, 2.5rem);
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--body);
+  overflow-x: hidden;
+
+  /* The paper lives on <body> so it covers the whole scrollable page.
+     It used to be a position:fixed pseudo-element on .letter, which only
+     ever covered one viewport — scroll down and the page went dark. */
+  background-color: #f6f1e7;
+  background-image:
+    radial-gradient(ellipse 150% 30rem at 50% 0, var(--paper-warm) 0%, transparent 70%),
+    linear-gradient(to bottom, var(--paper) 0%, transparent 40rem);
+  background-repeat: no-repeat;
+}
+
+/* Before React mounts there is nothing to show; keep it night-coloured so
+   the sky doesn't open on a white flash. */
+#root:empty {
+  position: fixed;
+  inset: 0;
+  background: var(--night);
+}
+
+/* scroll stays locked while the plane is in the air */
+body.is-flying {
+  overflow: hidden;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+}
+
+img { max-width: 100%; display: block; }

@@ -1,0 +1,252 @@
+/* ============================================================
+   The flight scene
+   ============================================================ */
+
+.flight {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: hidden;
+  background: var(--night);
+  /* the sky lifting IS the reveal — keep it brisk. If you change this,
+     change SKY_LIFT in App.jsx to match. */
+  transition: opacity 700ms cubic-bezier(.4, 0, .2, 1);
+}
+
+.flight.is-done { opacity: 0; pointer-events: none; }
+
+/* --- sky --- */
+
+.sky {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    var(--night)     0%,
+    var(--night-mid) 26%,
+    var(--dusk)      50%,
+    var(--rose)      68%,
+    var(--peach)     82%,
+    var(--haze)      100%
+  );
+}
+
+/* warm bloom sitting on the horizon */
+.glow {
+  position: absolute;
+  left: 50%;
+  bottom: 12%;
+  width: 150vw;
+  aspect-ratio: 2 / 1;
+  translate: -50% 0;
+  background: radial-gradient(
+    ellipse at 50% 100%,
+    rgba(255, 216, 168, .85) 0%,
+    rgba(255, 180, 140, .35) 35%,
+    transparent 68%
+  );
+  opacity: 0;
+  animation: bloom 3200ms cubic-bezier(.33, 1, .68, 1) 400ms forwards;
+}
+
+@keyframes bloom { to { opacity: 1; } }
+
+.stars { position: absolute; inset: 0 0 42% 0; }
+
+.star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: #fff;
+  opacity: 0;
+  animation: twinkle var(--dur, 3.5s) ease-in-out var(--delay, 0s) infinite;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: .15; }
+  50%      { opacity: var(--peak, .9); }
+}
+
+.cloud {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(22px);
+  background: rgba(255, 233, 214, .3);
+  animation: drift linear infinite;
+}
+
+.cloud--1 { width: 60vw; height: 9vh; left: -30vw; top: 54%; animation-duration: 58s; }
+.cloud--2 { width: 46vw; height: 6vh; left: -25vw; top: 66%; opacity: .7;
+            animation-duration: 42s; animation-delay: -14s; }
+.cloud--3 { width: 72vw; height: 7vh; left: -35vw; top: 47%; opacity: .45;
+            animation-duration: 74s; animation-delay: -30s; }
+
+@keyframes drift { to { transform: translateX(165vw); } }
+
+/* --- sea --- */
+
+.sea {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 17%;
+  background: linear-gradient(to bottom, #164166 0%, var(--sea) 60%, #071a2e 100%);
+  box-shadow: 0 -1px 0 rgba(255, 220, 190, .5);
+  opacity: 0;
+  animation: bloom 2200ms ease 700ms forwards;
+}
+
+.sea::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 230, 205, .07) 0 1px,
+    transparent 1px 7px
+  );
+}
+
+/* --- flight path --- */
+
+.trail { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* --- home / greece markers --- */
+
+/* label sits above the silhouette so it never lands in the water */
+.marker {
+  position: absolute;
+  bottom: 17%;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  opacity: 0;
+  animation: markerIn 1200ms cubic-bezier(.16, 1, .3, 1) forwards;
+}
+
+.marker--home   { left: 5%;  width: 30vw; max-width: 150px; animation-delay: 900ms; }
+.marker--greece { right: 4%; width: 36vw; max-width: 180px; animation-delay: 3400ms; }
+
+@keyframes markerIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.marker__art { width: 100%; height: auto; display: block; fill: rgba(9, 22, 44, .82); }
+
+.marker__art--greece .rock   { fill: rgba(9, 22, 44, .82); }
+.marker__art--greece .houses { fill: rgba(255, 248, 240, .92); }
+.marker__art--greece .domes  { fill: var(--aegean); }
+
+.marker__label {
+  margin: 0 0 .5rem;
+  font-family: var(--serif);
+  font-size: .68rem;
+  font-weight: 400;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  color: rgba(255, 245, 235, .82);
+}
+
+/* --- the plane --- */
+
+.plane {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: clamp(120px, 34vw, 190px);
+  aspect-ratio: 2 / 1;
+  will-change: transform;
+  opacity: 0;
+  filter: drop-shadow(0 6px 14px rgba(8, 14, 34, .45));
+}
+
+.plane.is-airborne { opacity: 1; transition: opacity 700ms ease; }
+
+.plane__svg { width: 100%; height: 100%; overflow: visible; }
+
+.plane__body     { fill: #fffaf3; }
+.plane__wing     { fill: #dfd3c6; }
+.plane__shadowy  { fill: #e9ded1; }
+.plane__engine   { fill: #c3b5a6; }
+.plane__windows  { fill: rgba(46, 111, 158, .55); }
+.plane__cockpit  { fill: rgba(46, 111, 158, .7); }
+.plane__porthole { fill: #10203c; stroke: #fffaf3; stroke-width: 3.5; }
+
+/* her photo, sitting inside the porthole.
+   geometry matches circle cx=150 cy=66 r=16 in a 240x120 viewBox */
+.plane__window {
+  position: absolute;
+  left: 62.5%;
+  top: 55%;
+  width: 12.5%;
+  height: 25%;
+  translate: -50% -50%;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #16294a;
+}
+
+.plane__window img { width: 100%; height: 100%; object-fit: cover; }
+
+/* fallback until images/heba.jpg exists */
+.plane__silhouette { display: none; width: 100%; height: 100%; fill: #8fb4d6; }
+.plane__window.no-photo img { display: none; }
+.plane__window.no-photo .plane__silhouette { display: block; }
+
+/* --- caption + skip --- */
+
+.scene-caption {
+  position: absolute;
+  top: max(8vh, calc(env(safe-area-inset-top) + 2.5rem));
+  left: 0;
+  right: 0;
+  margin: 0;
+  text-align: center;
+  font-family: var(--serif);
+  font-size: clamp(.95rem, 4.4vw, 1.25rem);
+  font-weight: 300;
+  letter-spacing: .34em;
+  text-indent: .34em;
+  text-transform: lowercase;
+  color: rgba(255, 246, 236, .9);
+  opacity: 0;
+  animation: captionIn 2400ms cubic-bezier(.16, 1, .3, 1) 300ms forwards;
+}
+
+@keyframes captionIn {
+  from { opacity: 0; letter-spacing: .6em; filter: blur(6px); }
+  to   { opacity: 1; letter-spacing: .34em; filter: blur(0); }
+}
+
+.skip {
+  position: absolute;
+  right: max(1rem, env(safe-area-inset-right));
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  padding: .7rem 1.1rem;
+  border: 0;
+  border-radius: 100px;
+  background: rgba(10, 18, 40, .3);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  color: rgba(255, 245, 235, .75);
+  font-family: var(--serif);
+  font-size: .72rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0;
+  animation: bloom 900ms ease 2600ms forwards;
+}
+
+@media (min-width: 720px) {
+  .marker--home   { left: 8%; }
+  .marker--greece { right: 8%; }
+  .scene-caption  { top: 12vh; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cloud, .star { animation: none; }
+  .star { opacity: .55; }
+  .flight { transition: none; }
+}
