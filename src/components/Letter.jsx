@@ -113,7 +113,7 @@ export default function Letter({ visible }) {
 
       <p className="reveal">
         I&apos;m going to miss the ordinary stuff the most. Not the big days,
-        the ordinary ones. The gym. the  volleyball games. How everytime i'd try to play with your cheeks, but it always pisses you off (although you used to love it from me).Our sob7iyet ma3 da2et tawle (btw kes ekht zahrek). nja2je2 3al staff w hamoudie b sheghel.
+        the ordinary ones. The gym. the  volleyball games. How everytime i'd try to play with your cheeks, but it always pisses you off (although you used to love it from me). How everytime beje la dal3ek w t2olele yala zeeh rami 3al camerat.Our sob7iyet ma3 da2et tawle (btw kes ekht zahrek). nja2je2 3al staff w hamoudie b sheghel.
         nfaker shu badna nekol. how we'd always leave our pm shift and end it with us screaming I love you at each other from opposite ends of the street. The way you always knew when I needed a hug, even when I didn&apos;t.
       </p>
 
